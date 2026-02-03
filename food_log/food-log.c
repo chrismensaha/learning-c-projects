@@ -23,6 +23,7 @@ int main(){
         free(expense);
         free(file_line);
         free(file_name);
+        free(item_name);
         return 1;
     }
 
@@ -34,7 +35,6 @@ int main(){
     for (int i=0;i<item_number;i++){
         printf("Enter Item Name: ");
         fgets(expense->item_name,STARTING_SIZE,stdin);
-        file_line[strcspn(file_line, "\n")] = 0;
         expense->item_name[strcspn(expense->item_name, "\n")] = 0;
 
         printf("Enter Item Price: ");
@@ -51,6 +51,7 @@ int main(){
         free(expense);
         free(file_line);
         free(file_name);
+        free(item_name);
         return 1;
     }
    
