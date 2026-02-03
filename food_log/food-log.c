@@ -57,15 +57,14 @@ int main(){
     double temp_price=0.0;
 
     
-    while(fgets(file_line,STARTING_SIZE,file)!=NULL){
+    while(fgets(file_line,STARTING_SIZE,file_ptr)!=NULL){
         char* temp_name=malloc(STARTING_SIZE*sizeof(char));
         file_line[strcspn(file_line, "\n")]=0;
         if (sscanf(file_line, "%[^:]: $%lf", temp_name, &temp_price) == 2) { 
+            printf("%s: $%.2f\n",temp_name,temp_price);  
             total_cost += temp_price;
-        }       
-        printf("%s: $%.2f\n",temp_name,temp_price);  
-        free(temp_name);     
-        
+        }             
+        free(temp_name);            
     }
     printf("$%.2f\n",total_cost);
 
