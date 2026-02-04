@@ -7,6 +7,7 @@ If you get to the end of the file and haven't found them, print "Student not fou
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>.
 #define STARTING_SIZE 100
 
 typedef struct student{
@@ -26,7 +27,7 @@ int main(){
     fgets(name,STARTING_SIZE,stdin);
         name[strcspn(name, "\n")] = 0;
     printf("Enter Student Grade: "); 
-    scanf("%lf",student->grade);
+    scanf("%lf",&student->grade);
         while (getchar() != '\n');
     printf("Enter File Name: ");
     fgets(filename,STARTING_SIZE,stdin);  
@@ -41,11 +42,9 @@ int main(){
         return 1;
     }
 
-    while(fgets(fileline,STARTING_SIZE,file)!=NULL){
-        student->name[strcspn(student->name, "\n")] = 0;
-        fprintf(file,"%s\n",student->name);
-        fprintf(file,"%lf\n",student->grade);
-    }
+    fprintf(file,"%s ",student->name);
+    fprintf(file,"%lf\n",student->grade);
+    
 
     fclose(file);
     FILE* fileptr = fopen(filename,"r");
@@ -57,13 +56,35 @@ int main(){
         return 1;
     }
 
+
+    double temp_grade=0.0;
+    char has_passed=0;
+    int passed=0;
+    int total=0;
+    char isfound=1;
+    char* temp_name=malloc(STARTING_SIZE*sizeof(char));
     while(fgets(fileline,STARTING_SIZE,fileptr)!=NULL){
-        if (sscanf());
+        fileline[strcspn(fileline, "\n")] = 0;       
+        if (sscanf(fileline, "%[^ ] %lf", temp_name, &temp_grade) == 2){
+            if (strcmp(temp_name,name)==0){
+                if (temp_grade>=60.00){
+                    passed++;
+                    printf("Student: %s Grade: %.2f",temp_name,temp_grade);                
+                }
+            total++;
+            }  
+            else{
+                isfound=0;
+                printf("Student %s Not Found!",temp_name);
+            }
+        }
     }
+    printf("%d of %d Students Passed",passed,total);
 
     free(name);
     free(student);
     free(filename);
+    free(temp_name);
     fclose(fileptr);
     return 0;
 }
