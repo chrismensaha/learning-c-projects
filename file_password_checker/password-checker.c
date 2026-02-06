@@ -3,14 +3,7 @@
 #include <string.h>
 #include "password-checker.h"
 
-#define STARTING_SIZE 100 
 
-typedef struct password
-{
-    int is_secure_length;
-    int has_num;
-    int has_upper;
-} Password;
 
 void password_checker(char* input, Password* result){
     result->is_secure_length=0;
@@ -30,8 +23,9 @@ void password_checker(char* input, Password* result){
     }
 
 
-int main(){
-    char input[STARTING_SIZE];
+void check_password(){
+    size_t size_buffer = STARTING_SIZE;
+    char input[size_buffer];
     char resume='Y';
     int change=0;
     int is_running=1;
@@ -41,9 +35,6 @@ int main(){
     while (is_running){
         switch (change){
         case A:
-            printf("Enter Password: ");
-            fgets(input,STARTING_SIZE,stdin);
-            input[strcspn(input, "\n")] = 0;
             password_checker(input,password);
             if (password->is_secure_length==0){printf("Please use a longer password!\n");}
             if (password->has_num==0){printf("Please Include a Number!\n");}
