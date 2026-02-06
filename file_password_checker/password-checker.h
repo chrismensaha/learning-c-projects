@@ -10,7 +10,7 @@ typedef struct password
     int has_upper;
 } Password;
 
-void password_checker(char* input, Password* result);
+void password_checker(char* input, Password result);
 void check_password();
 
 #endif
