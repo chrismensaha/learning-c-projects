@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define STARTING_SIZE 100
 
 typedef struct expense{
@@ -8,9 +9,9 @@ typedef struct expense{
 } Expense;
 
 int main(){
-    Expense* expense=malloc(sizeof(Expense));
-    char* item_name=malloc(STARTING_SIZE*sizeof(char));
-    expense->item_name=item_name;
+    Expense expense;
+    char item_name[STARTING_SIZE];
+    expense.item_name=item_name;
     char* file_name=malloc(STARTING_SIZE*sizeof(char));
     printf("File Name: ");
     fgets(file_name,STARTING_SIZE,stdin);
@@ -20,10 +21,8 @@ int main(){
     FILE* file=fopen(file_name,"w");
 
     if (file==NULL){
-        free(expense);
         free(file_line);
         free(file_name);
-        free(item_name);
         return 1;
     }
 
@@ -34,24 +33,22 @@ int main(){
 
     for (int i=0;i<item_number;i++){
         printf("Enter Item Name: ");
-        fgets(expense->item_name,STARTING_SIZE,stdin);
-        expense->item_name[strcspn(expense->item_name, "\n")] = 0;
+        fgets(expense.item_name,STARTING_SIZE,stdin);
+        expense.item_name[strcspn(expense.item_name, "\n")] = 0;
 
         printf("Enter Item Price: ");
-        scanf("%lf",&expense->price);
+        scanf("%lf",&expense.price);
         while (getchar() != '\n');
 
-        fprintf(file,"%s: ",expense->item_name);
-        fprintf(file,"$%.2f\n",expense->price);
+        fprintf(file,"%s: ",expense.item_name);
+        fprintf(file,"$%.2f\n",expense.price);
 
         }
     fclose(file);
     FILE* file_ptr=fopen(file_name,"r");
     if (file_ptr==NULL){
-        free(expense);
         free(file_line);
         free(file_name);
-        free(item_name);
         return 1;
     }
    
@@ -66,14 +63,12 @@ int main(){
             printf("%s: $%.2f\n",temp_name,temp_price);  
             total_cost += temp_price;
         }             
-        free(temp_name);         
+        free(temp_name);
     }
-    printf("$%.2f\n",total_cost);
+    printf("Total: $%.2f\n",total_cost);
 
 
     fclose(file_ptr);
-    free(expense);
-    free(item_name);
     free(file_line);
     free(file_name);
     return 0;

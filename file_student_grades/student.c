@@ -7,7 +7,7 @@ If you get to the end of the file and haven't found them, print "Student not fou
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>.
+#include <string.h>
 #define STARTING_SIZE 100
 
 typedef struct student{
@@ -16,46 +16,45 @@ typedef struct student{
 }Student;
 
 int main(){
-    Student* student=malloc(sizeof(Student));
-       
+    Student student;
+    
     char* filename=malloc(STARTING_SIZE*sizeof(char));  
     char* fileline=malloc(STARTING_SIZE*sizeof(char)); 
     char* name=malloc(STARTING_SIZE*sizeof(char));
-    student->name=name;
+    
+    student.name=name;
 
+    printf("Enter File Name: ");
+    fgets(filename,STARTING_SIZE,stdin);  
+        filename[strcspn(filename, "\n")] = 0;
     printf("Enter Student Name: ");  
     fgets(name,STARTING_SIZE,stdin);
         name[strcspn(name, "\n")] = 0;
     printf("Enter Student Grade: "); 
-    scanf("%lf",&student->grade);
+    scanf("%lf",&student.grade);
         while (getchar() != '\n');
-    printf("Enter File Name: ");
-    fgets(filename,STARTING_SIZE,stdin);  
-        filename[strcspn(filename, "\n")] = 0;
+
 
     FILE* file = fopen(filename,"w");
 
     if (file==NULL){
-        free(student);
         free(filename);
         free(name);
         return 1;
     }
 
-    fprintf(file,"%s ",student->name);
-    fprintf(file,"%lf\n",student->grade);
+    fprintf(file,"%s ",student.name);
+    fprintf(file,"%.1f\n",student.grade);
     
 
     fclose(file);
     FILE* fileptr = fopen(filename,"r");
 
     if (fileptr==NULL){
-        free(student);
         free(filename);
         free(name);
         return 1;
     }
-
 
     double temp_grade=0.0;
     char has_passed=0;
@@ -63,26 +62,28 @@ int main(){
     int total=0;
     char isfound=1;
     char* temp_name=malloc(STARTING_SIZE*sizeof(char));
+
     while(fgets(fileline,STARTING_SIZE,fileptr)!=NULL){
         fileline[strcspn(fileline, "\n")] = 0;       
-        if (sscanf(fileline, "%[^ ] %lf", temp_name, &temp_grade) == 2){
+        if (sscanf(fileline, "%[^ ] %f", temp_name, &temp_grade) == 2){
             if (strcmp(temp_name,name)==0){
                 if (temp_grade>=60.00){
-                    passed++;
-                    printf("Student: %s Grade: %.2f",temp_name,temp_grade);                
+                    passed=3;
+                    printf("Student: %s Grade: %.1f\n",temp_name,temp_grade); 
                 }
             total++;
-            }  
+            }
             else{
                 isfound=0;
-                printf("Student %s Not Found!",temp_name);
+                printf("Student %s Not Found!\n",temp_name);
             }
         }
+        printf("%d of %d Students Passed",passed,total);
     }
-    printf("%d of %d Students Passed",passed,total);
+    
 
-    free(name);
-    free(student);
+
+    free(name); 
     free(filename);
     free(temp_name);
     fclose(fileptr);
