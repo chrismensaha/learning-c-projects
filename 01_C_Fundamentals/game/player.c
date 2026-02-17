@@ -1,25 +1,9 @@
-#include <stdio.h>
-#include <string.h>
 #define BUFFER 100
+#include "game.h"
 
 
-typedef struct player{
-    char name[50];
-    unsigned int level;
-    float health;
-    float experience;
-} Player;
 
-Player player;
-typedef struct enemy{
-    char name[50];
-    char type[10];
-    unsigned int level;
-    float health;
-} Enemy;
-
-void create_player(){    
-    
+void create_player(){
     char creation_choice;
     printf("[1] to Create Your Own Player | [2] for Default: ");
     scanf("%c",&creation_choice);
@@ -29,7 +13,9 @@ void create_player(){
         for (int i=0;i<strlen(name);i++)
             player.name[i]=name[i];
         player.level=1;
-        player.health=100.0;
+        player.health=100.0; 
+        player.experience=0.0;
+        return;  
     }
     else{
         printf("Enter player name: ");
@@ -44,19 +30,32 @@ void create_player(){
     scanf("%f",&player.health);
     while(getchar()!='\n');
 
+    player.alive=1;
 }
 
-void level_up(int increase){
-    player.level++;
+void gain_exp(float experience){
+    player.experience+=experience;
 }
-int main(){
-    create_player();
 
-    return 0;
-    
-
-
-
-    
-    
+void level_up(){ 
+    while (player.experience>=100.0){
+        player.level++;
+        player.experience-=100;
+    }
 }
+
+void player_take_dmg(float damage){ 
+    if (player.health!=0){
+        player.health-=damage;
+    }
+}
+
+int player_is_dead(){ 
+    char is_dead=0;
+    if (player.health<=0){
+        player.alive=0;
+        is_dead=1;
+        return is_dead;
+    }
+}
+
